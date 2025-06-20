@@ -1,8 +1,8 @@
 from src.config import config
-from src.HH_api import get_hh_data_short, get_hh_data_full
 from src.database_utils import create_database, save_data_to_database
 from src.DBManager import DBManager
-from typing import Any
+from src.HH_api import get_hh_data_full, get_hh_data_short
+
 
 def main() -> None:
     """Функция взаимодействия с пользователем. Объединяет логику проекта"""
@@ -12,7 +12,10 @@ def main() -> None:
 
     # Запускаем цикл
     while running:
-        print("Выберите действие:\n1. Получить данные о компаниях и всех вакансиях компании.\n2. Получить данные о компаниях и до 100 вакансий компании.")
+        print(
+            "Выберите действие:\n1. Получить данные о компаниях и всех вакансиях компании.\n"
+            "2. Получить данные о компаниях и до 100 вакансий компании."
+        )
         choose_one = int(input("Введите -> "))
         if choose_one == 1:
             print("Ожидайте получения данных!\n")
@@ -66,7 +69,7 @@ def main() -> None:
                 if len(result[i]) > 0:
                     company_name = result[i][0]
                     vacancies_count = result[i][1]
-                    print(f"\n{i+1}) Компания: {company_name}. Количество вакансий: {vacancies_count}")
+                    print(f"\n{i + 1}) Компания: {company_name}. Количество вакансий: {vacancies_count}")
         elif choose_two == 2:
             result = dbmanager.get_all_vacancies()
             for i in range(len(result)):
@@ -77,9 +80,12 @@ def main() -> None:
                     salary_to = result[i][3]
                     currency = result[i][4]
                     url = result[i][5]
-                    print(f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\nЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}")
+                    print(
+                        f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\n"
+                        f"ЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}"
+                    )
         elif choose_two == 3:
-            result = dbmanager.get_avg_salary()
+            result = dbmanager.get_avg_salary()  # type: ignore
             print(f"Средняя зарплата: {result}")
         elif choose_two == 4:
             result = dbmanager.get_vacancies_with_higher_salary()
@@ -92,7 +98,9 @@ def main() -> None:
                     currency = result[i][4]
                     url = result[i][5]
                     print(
-                        f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\nЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}")
+                        f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\n"
+                        f"ЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}"
+                    )
         elif choose_two == 5:
             keyword = input("Введите ключевое слово -> ")
             result = dbmanager.get_vacancies_with_keyword(keyword)
@@ -105,11 +113,10 @@ def main() -> None:
                     currency = result[i][4]
                     url = result[i][5]
                     print(
-                        f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\nЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}")
+                        f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\n"
+                        f"ЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}"
+                    )
         elif choose_two == 0:
-            result = None
-            dbmanager = None
-            choose_two = None
             running = False
         else:
             print("\nВы ничего не выбрали. Попробуйте ещё раз!")

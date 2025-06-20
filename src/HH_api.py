@@ -1,5 +1,7 @@
-import requests
 from typing import Any
+
+import requests
+
 
 def get_hh_data_short(employers_id: list[str]) -> list[dict[str, Any]]:
     """
@@ -28,17 +30,15 @@ def get_hh_data_short(employers_id: list[str]) -> list[dict[str, Any]]:
         page_n = 0
         data_vacs = []
         params = {"employer_id": employer_id, "per_page": 100, "page": page_n}
-        response_vac = requests.get(url_vac, params)
+        response_vac = requests.get(url_vac, params)  # type: ignore
         data_vac = response_vac.json()
         vacancies = []
         for vac in data_vac["items"]:
             name = vac["name"]
             area = vac["area"].get("name") if vac["area"].get("name") is not None else "Нет данных"
             salary = vac.get("salary")
-            if salary == None:
-                salary = {"salary": 0,
-                          "salary_range": 0,
-                          "currency": "Не указана"}
+            if salary is None:
+                salary = {"salary": 0, "salary_range": 0, "currency": "Не указана"}
             salary_from = salary.get("from") if salary.get("from") is not None else 0
             salary_to = salary.get("to") if salary.get("to") is not None else salary_from
             currency = salary.get("currency") if salary.get("currency") is not None else "Не указано"
@@ -53,7 +53,7 @@ def get_hh_data_short(employers_id: list[str]) -> list[dict[str, Any]]:
                 "currency": currency,
                 "published_at": published_at,
                 "responsibility": responsibility,
-                "url": url
+                "url": url,
             }
             vacancies.append(vacancy_inf)
         data_vacs.extend(vacancies)
@@ -90,7 +90,7 @@ def get_hh_data_full(employers_id: list[str]) -> list[dict[str, Any]]:
         data_vacs = []
         while True:
             params = {"employer_id": employer_id, "per_page": 100, "page": page_n}
-            response_vac = requests.get(url_vac, params)
+            response_vac = requests.get(url_vac, params)  # type: ignore
             data_vac = response_vac.json()
             if len(data_vac.get("items", "")) == 0:
                 break
@@ -99,10 +99,8 @@ def get_hh_data_full(employers_id: list[str]) -> list[dict[str, Any]]:
                 name = vac["name"]
                 area = vac["area"].get("name") if vac["area"].get("name") is not None else "Нет данных"
                 salary = vac.get("salary")
-                if salary == None:
-                    salary = {"salary": 0,
-                              "salary_range": 0,
-                              "currency": "Не указана"}
+                if salary is None:
+                    salary = {"salary": 0, "salary_range": 0, "currency": "Не указана"}
                 salary_from = salary.get("from") if salary.get("from") is not None else 0
                 salary_to = salary.get("to") if salary.get("to") is not None else salary_from
                 currency = salary.get("currency") if salary.get("currency") is not None else "Не указано"
@@ -117,7 +115,7 @@ def get_hh_data_full(employers_id: list[str]) -> list[dict[str, Any]]:
                     "currency": currency,
                     "published_at": published_at,
                     "responsibility": responsibility,
-                    "url": url
+                    "url": url,
                 }
                 vacancies.append(vacancy_inf)
             data_vacs.extend(vacancies)

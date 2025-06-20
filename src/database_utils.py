@@ -1,5 +1,7 @@
-import psycopg2
 from typing import Any
+
+import psycopg2
+
 
 def create_database(database_name: str, params: dict) -> None:
     """Создание базы данных и таблиц для сохранения данных о компаниях и вакансиях"""
@@ -10,7 +12,7 @@ def create_database(database_name: str, params: dict) -> None:
     try:
         cur.execute(f"DROP DATABASE {database_name}")
     except Exception as e:
-        print(f'Информация: {e}. БД будет создана.')
+        print(f"Информация: {e}. БД будет создана.")
     finally:
         cur.execute(f"CREATE DATABASE {database_name}")
 
@@ -20,7 +22,8 @@ def create_database(database_name: str, params: dict) -> None:
     conn = psycopg2.connect(dbname=database_name, **params)
 
     with conn.cursor() as cur:
-        cur.execute("""
+        cur.execute(
+            """
             CREATE TABLE companies (
                 company_id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
@@ -30,10 +33,12 @@ def create_database(database_name: str, params: dict) -> None:
                 url VARCHAR(255),
                 vacancies_url VARCHAR(255)
             )
-        """)
+        """
+        )
 
     with conn.cursor() as cur:
-        cur.execute("""
+        cur.execute(
+            """
             CREATE TABLE vacancies (
                 vacancy_id SERIAL PRIMARY KEY,
                 company_id INT REFERENCES companies(company_id),
@@ -46,10 +51,12 @@ def create_database(database_name: str, params: dict) -> None:
                 responsibility VARCHAR(255),
                 url VARCHAR(255)
             )
-        """)
+        """
+        )
 
     conn.commit()
     conn.close()
+
 
 def save_data_to_database(data: list[dict[str, Any]], database_name: str, params: dict) -> None:
     """Сохранение данных о компаниях и вакансиях в базу данных."""
@@ -61,20 +68,42 @@ def save_data_to_database(data: list[dict[str, Any]], database_name: str, params
         for company in data:
             company_data = company["company"]
             cur.execute(
-            """
+                """
                 INSERT INTO companies (name, area, open_vacancies, industries, url,vacancies_url)
                 VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING company_id
-                """, (company_data["name"], company_data["area"], company_data["open_vacancies"], company_data["industries"][0]["name"], company_data["url"], company_data["vacancies_url"]))
+                """,
+                (
+                    company_data["name"],
+                    company_data["area"],
+                    company_data["open_vacancies"],
+                    company_data["industries"][0]["name"],
+                    company_data["url"],
+                    company_data["vacancies_url"],
+                ),
+            )
             company_id = cur.fetchone()[0]
 
             vacancies_data = company["vacancies"]
             for vacancy in vacancies_data:
                 cur.execute(
-                """
-                     INSERT INTO vacancies (company_id, name, area, salary_from, salary_to, currency, published_at, responsibility, url)
+                    """
+                     INSERT INTO vacancies
+                     (company_id, name, area, salary_from, salary_to, currency, published_at, responsibility, url)
                      VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """, (company_id, vacancy["name"], vacancy["area"], vacancy["salary_from"], vacancy["salary_to"], vacancy["currency"], vacancy["published_at"], vacancy["responsibility"], vacancy["url"]))
+                    """,
+                    (
+                        company_id,
+                        vacancy["name"],
+                        vacancy["area"],
+                        vacancy["salary_from"],
+                        vacancy["salary_to"],
+                        vacancy["currency"],
+                        vacancy["published_at"],
+                        vacancy["responsibility"],
+                        vacancy["url"],
+                    ),
+                )
 
     conn.commit()
     conn.close()
