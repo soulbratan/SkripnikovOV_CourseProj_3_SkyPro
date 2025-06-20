@@ -69,17 +69,43 @@ def main() -> None:
                     print(f"\n{i+1}) Компания: {company_name}. Количество вакансий: {vacancies_count}")
         elif choose_two == 2:
             result = dbmanager.get_all_vacancies()
-            print(f"\n{result}")
+            for i in range(len(result)):
+                if len(result[i]) > 0:
+                    company_name = result[i][0]
+                    vacancies_name = result[i][1]
+                    salary_from = result[i][2]
+                    salary_to = result[i][3]
+                    currency = result[i][4]
+                    url = result[i][5]
+                    print(f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\nЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}")
         elif choose_two == 3:
             result = dbmanager.get_avg_salary()
             print(f"Средняя зарплата: {result}")
         elif choose_two == 4:
             result = dbmanager.get_vacancies_with_higher_salary()
-            print(f"\n{result}")
+            for i in range(len(result)):
+                if len(result[i]) > 0:
+                    company_name = result[i][0]
+                    vacancies_name = result[i][1]
+                    salary_from = result[i][2]
+                    salary_to = result[i][3]
+                    currency = result[i][4]
+                    url = result[i][5]
+                    print(
+                        f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\nЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}")
         elif choose_two == 5:
             keyword = input("Введите ключевое слово -> ")
             result = dbmanager.get_vacancies_with_keyword(keyword)
-            print(f"\n{result}")
+            for i in range(len(result)):
+                if len(result[i]) > 0:
+                    company_name = result[i][0]
+                    vacancies_name = result[i][1]
+                    salary_from = result[i][2]
+                    salary_to = result[i][3]
+                    currency = result[i][4]
+                    url = result[i][5]
+                    print(
+                        f"\n{i + 1})\nКомпания: {company_name}.\nВакансия: {vacancies_name}\nЗП от: {salary_from}\nЗП до: {salary_to}\nВалюта: {currency}\nСсылка: {url}")
         elif choose_two == 0:
             result = None
             dbmanager = None
