@@ -10,7 +10,7 @@ def create_database(database_name: str, params: dict) -> None:
     try:
         cur.execute(f"DROP DATABASE {database_name}")
     except Exception as e:
-        print(f'Информация: {e}')
+        print(f'Информация: {e}. БД будет создана.')
     finally:
         cur.execute(f"CREATE DATABASE {database_name}")
 
@@ -73,7 +73,7 @@ def save_data_to_database(data: list[dict[str, Any]], database_name: str, params
                 cur.execute(
                 """
                      INSERT INTO vacancies (company_id, name, area, salary_from, salary_to, currency, published_at, responsibility, url)
-                     VALUES (%s, %s, %s, %s, %s, %s)
+                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """, (company_id, vacancy["name"], vacancy["area"], vacancy["salary_from"], vacancy["salary_to"], vacancy["currency"], vacancy["published_at"], vacancy["responsibility"], vacancy["url"]))
 
     conn.commit()
