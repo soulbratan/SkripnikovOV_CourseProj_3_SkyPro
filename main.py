@@ -62,7 +62,10 @@ def main() -> None:
         print("4. Получить список всех вакансий, у которых зарплата выше средней по всем вакансиям.")
         print("5. Получить список всех вакансий по ключевому слову.")
         print("0. Завершить работу.")
-        choose_two = int(input("Введите -> "))
+        try:
+            choose_two = int(input("Введите -> "))
+        except ValueError:
+            choose_two = 6
         if choose_two == 1:
             result = dbmanager.get_companies_and_vacancies_count()
             for i in range(len(result)):
