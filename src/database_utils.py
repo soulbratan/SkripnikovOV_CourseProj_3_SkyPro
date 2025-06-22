@@ -14,7 +14,7 @@ def create_database(database_name: str, params: dict) -> None:
     except Exception as e:
         print(f"Информация: {e}. БД будет создана.")
     finally:
-        cur.execute(f"CREATE DATABASE {database_name}")
+        cur.execute(f"CREATE DATABASE {database_name} ENCODING 'UTF8'")
 
     cur.close()
     conn.close()

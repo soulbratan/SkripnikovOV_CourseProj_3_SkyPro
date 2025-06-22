@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Tuple
+from typing import Any, Tuple
 
 import psycopg2
 
@@ -9,31 +9,31 @@ class DBase(ABC):
 
     @abstractmethod
     def connect(self) -> psycopg2.extensions.connection:
-        pass
+        pass    # pragma: no cover
 
     @abstractmethod
     def disconnect(self) -> None:
-        pass
+        pass    # pragma: no cover
 
     @abstractmethod
-    def get_companies_and_vacancies_count(self) -> List[Tuple]:
-        pass
+    def get_companies_and_vacancies_count(self) -> list[Tuple]:
+        pass    # pragma: no cover
 
     @abstractmethod
-    def get_all_vacancies(self) -> List[Tuple]:
-        pass
+    def get_all_vacancies(self) -> list[Tuple]:
+        pass    # pragma: no cover
 
     @abstractmethod
     def get_avg_salary(self) -> float:
-        pass
+        pass    # pragma: no cover
 
     @abstractmethod
-    def get_vacancies_with_higher_salary(self) -> List[Tuple]:
-        pass
+    def get_vacancies_with_higher_salary(self) -> list[Tuple]:
+        pass    # pragma: no cover
 
     @abstractmethod
-    def get_vacancies_with_keyword(self, keyword: str) -> List[Tuple]:
-        pass
+    def get_vacancies_with_keyword(self, keyword: str) -> list[Tuple]:
+        pass    # pragma: no cover
 
 
 class DBManager(DBase):
@@ -67,7 +67,7 @@ class DBManager(DBase):
         """Поддержка контекстного менеджера"""
         self.disconnect()
 
-    def get_companies_and_vacancies_count(self) -> List[Tuple]:
+    def get_companies_and_vacancies_count(self) -> list[Tuple]:
         """Получение списка всех компаний и количества вакансий у каждой компании."""
         self.connect()
         with self.conn.cursor() as cur:
@@ -84,7 +84,7 @@ class DBManager(DBase):
             self.disconnect()
         return result
 
-    def get_all_vacancies(self) -> List[Tuple]:
+    def get_all_vacancies(self) -> list[Tuple]:
         """Получение списка всех вакансий с указанием компании, названия, зарплаты и ссылки."""
         self.connect()
         with self.conn.cursor() as cur:
@@ -120,7 +120,7 @@ class DBManager(DBase):
             self.disconnect()
         return round(result[0], 2) if result is not None else 0.0
 
-    def get_vacancies_with_higher_salary(self) -> List[Tuple]:
+    def get_vacancies_with_higher_salary(self) -> list[Tuple]:
         """Получение списка вакансий с зарплатой выше средней."""
         self.connect()
         with self.conn.cursor() as cur:
@@ -152,7 +152,7 @@ class DBManager(DBase):
             self.disconnect()
         return result
 
-    def get_vacancies_with_keyword(self, keyword: str) -> List[Tuple]:
+    def get_vacancies_with_keyword(self, keyword: str) -> list[Tuple]:
         """Получение списка вакансий, содержащих ключевое слово в названии."""
         self.connect()
         with self.conn.cursor() as cur:
